@@ -217,6 +217,7 @@ group by continent
 insert into Continente(iso_code)
 select representante.iso_code from continents_name
 join representante on representante.name = continents_name.name;
+
 --- Insertar los paises
 -- Codigo de continente con su nombre
 with all_continents as (
@@ -225,34 +226,35 @@ with all_continents as (
 ),
 
 	 continent_contry_codes as (
-select all_continents.iso_code as continent_isocode, covid_data.iso_code as country_isocode,
-		 covid_data.population_density, covid_data.median_age, 
-         covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
-         covid_data.extreme_poverty, covid_data.cardiovasc_death_rate, covid_data.diabetes_prevalence, 
-         covid_data.female_smokers, covid_data.male_smokers, covid_data.handwashing_facilities,
-		 covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
-from covid_data
-join all_continents on all_continents.name = covid_data.continent
-where continent is not null
-group by all_continents.iso_code, covid_data.iso_code,
-		 covid_data.population_density, covid_data.median_age, 
-         covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
-         covid_data.extreme_poverty, covid_data.cardiovasc_death_rate, covid_data.diabetes_prevalence, 
-         covid_data.female_smokers, covid_data.male_smokers, covid_data.handwashing_facilities,
-		 covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
+    select all_continents.iso_code as continent_isocode, covid_data.iso_code as country_isocode,
+            covid_data.population_density, covid_data.median_age, 
+            covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
+            covid_data.extreme_poverty, covid_data.cardiovasc_death_rate, covid_data.diabetes_prevalence, 
+            covid_data.female_smokers, covid_data.male_smokers, covid_data.handwashing_facilities,
+            covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
+    from covid_data
+    join all_continents on all_continents.name = covid_data.continent
+    where continent is not null
+    group by all_continents.iso_code, covid_data.iso_code,
+            covid_data.population_density, covid_data.median_age, 
+            covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
+            covid_data.extreme_poverty, covid_data.cardiovasc_death_rate, covid_data.diabetes_prevalence, 
+            covid_data.female_smokers, covid_data.male_smokers, covid_data.handwashing_facilities,
+            covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
 )
+
 insert into pais(iso_code, iso_code_contienente, population_density, median_age, 
-aged_65_older, aged_70_older, gdp_per_capita, 
-extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-female_smokers, male_smokers, handwashing_facilities,
-hospital_beds_per_thousand, life_expectancy, human_development_index)
+    aged_65_older, aged_70_older, gdp_per_capita, 
+    extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+    female_smokers, male_smokers, handwashing_facilities,
+    hospital_beds_per_thousand, life_expectancy, human_development_index)
 select country_isocode, continent_isocode,
        population_density, median_age, 
-aged_65_older, aged_70_older, gdp_per_capita, 
-extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-female_smokers, male_smokers, handwashing_facilities,
-hospital_beds_per_thousand, life_expectancy, human_development_index
-from continent_contry_codes;
+    aged_65_older, aged_70_older, gdp_per_capita, 
+    extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+    female_smokers, male_smokers, handwashing_facilities,
+    hospital_beds_per_thousand, life_expectancy, human_development_index
+    from continent_contry_codes;
 
 Select * From covid_data
 Where iso_code = 'GRL'
@@ -288,3 +290,44 @@ with group_isocodes as (
 )
 insert into grupo(iso_code)
 select iso_code from  group_isocodes;
+
+--- Insertar las fechas
+insert into Date(date)
+select date from covid_data
+group by date;
+
+-- Relacionar los representates con sus datos y la fecha
+
+with representante_fecha as (
+	select iso_code, date from covid_data
+	group by date, iso_code
+	)
+
+insert into Data_obtained(representante_iso_code, date_id, stringency_index, 
+	reproduction_rate, total_cases, new_cases, new_cases_smoothed, total_cases_per_million,
+    new_cases_per_million, new_cases_smoothed_per_million, total_deaths, new_deaths, new_deaths_smoothed,
+    total_deaths_per_million, new_deaths_per_million, new_deaths_smoothed_per_million,
+    icu_patients, icu_patients_per_million, hosp_patients, hosp_patients_per_million,
+    weekly_icu_admissions, weekly_icu_admissions_per_million, weekly_hosp_admissions,
+    weekly_hosp_admissions_per_million, total_tests, new_tests, total_tests_per_thousand,
+    new_tests_per_thousand, new_tests_smoothed, new_tests_smoothed_per_thousand, positive_rate,
+    tests_per_case, tests_units, total_vaccinations, people_vaccinated, people_fully_vaccinated,
+    total_boosters, new_vaccinations, new_vaccinations_smoothed, total_vaccinations_per_hundred,
+    people_vaccinated_per_hundred, people_fully_vaccinated_per_hundred, total_boosters_per_hundred,
+    new_vaccinations_smoothed_per_million, new_people_vaccinated_smoothed, new_people_vaccinated_smoothed_per_hundred,
+    excess_mortality, excess_mortality_cumulative, excess_mortality_cumulative_absolute, excess_mortality_cumulative_per_million
+)
+select iso_code, date, stringency_index, reproduction_rate, total_cases, new_cases, new_cases_smoothed, total_cases_per_million,
+    new_cases_per_million, new_cases_smoothed_per_million, total_deaths, new_deaths, new_deaths_smoothed,
+    total_deaths_per_million, new_deaths_per_million, new_deaths_smoothed_per_million,
+    icu_patients, icu_patients_per_million, hosp_patients, hosp_patients_per_million,
+    weekly_icu_admissions, weekly_icu_admissions_per_million, weekly_hosp_admissions,
+    weekly_hosp_admissions_per_million, total_tests, new_tests, total_tests_per_thousand,
+    new_tests_per_thousand, new_tests_smoothed, new_tests_smoothed_per_thousand, positive_rate,
+    tests_per_case, tests_units, total_vaccinations, people_vaccinated, people_fully_vaccinated,
+    total_boosters, new_vaccinations, new_vaccinations_smoothed, total_vaccinations_per_hundred,
+    people_vaccinated_per_hundred, people_fully_vaccinated_per_hundred, total_boosters_per_hundred,
+    new_vaccinations_smoothed_per_million, new_people_vaccinated_smoothed, new_people_vaccinated_smoothed_per_hundred,
+    excess_mortality, excess_mortality_cumulative, excess_mortality_cumulative_absolute, excess_mortality_cumulative_per_million 
+    from representante_fecha
+natural join covid_data;
