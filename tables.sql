@@ -143,7 +143,7 @@ INSERT INTO Representante(iso_code, name, population)
 Select iso_code, location, population
 From covid_data
 Where continent is null
-Group by iso_code, location, population
+Group by iso_code, location, population;
 
 -- lenar tabla continente 
 INSERT INTO Continente(iso_code)
@@ -158,7 +158,7 @@ Join (Select continent
 On t1.location = t2.continent;
 
 -- llenar tabla de grupos
-
+INSERT INTO Grupo(iso_code)
 Select iso_code
 From covid_data
 Where continent is null 
