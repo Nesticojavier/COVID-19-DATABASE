@@ -1,3 +1,12 @@
+drop table if exists Data_obtained;
+drop table if exists Pais;
+drop table if exists Continente;
+drop table if exists Grupo;
+drop table if exists Mundo;
+drop table if exists Representante;
+drop table if exists date;
+
+
 Create Table Representante(
     iso_code varchar(255) PRIMARY KEY,
     population double precision
