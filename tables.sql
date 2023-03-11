@@ -134,3 +134,44 @@ Create Table Data_obtained (
     FOREIGN KEY (representante_iso_code) REFERENCES  Representante (iso_code),
     FOREIGN KEY (date_id) REFERENCES  Date (date)
 );
+
+Delete From Continente;
+Delete From Representante;
+
+-- llenar tabla representante
+INSERT INTO Representante(iso_code, name, population)
+Select iso_code, location, population
+From covid_data
+Where continent is null
+Group by iso_code, location, population
+
+-- lenar tabla continente 
+INSERT INTO Continente(iso_code)
+Select iso_code
+From (Select iso_code, location, population
+      From covid_data
+      Where continent is null
+      Group by iso_code, location, population) t1
+Join (Select continent
+      From covid_data
+      Group by continent) t2
+On t1.location = t2.continent;
+
+-- llenar tabla de grupos
+
+Select iso_code
+From covid_data
+Where continent is null 
+      AND population is Not Null
+	  AND location != 'World'
+Group by iso_code, location, population
+EXCEPT
+Select iso_code
+From (Select iso_code, location, population
+      From covid_data
+      Where continent is null
+      Group by iso_code, location, population) t1
+Join (Select continent
+      From covid_data
+      Group by continent) t2
+On t1.location = t2.continent;
