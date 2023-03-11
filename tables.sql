@@ -54,7 +54,7 @@ Create Table Mundo(
     life_expectancy double precision ,
     human_development_index double precision ,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
-)
+);
 
 Create Table Date(
     date date,
