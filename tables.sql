@@ -1,4 +1,4 @@
-/*
+
 drop table if exists Data_obtained;
 drop table if exists Pais;
 drop table if exists Continente;
@@ -136,7 +136,7 @@ Create Table Data_obtained (
     FOREIGN KEY (date_id) REFERENCES  Date (date)
 );
 
-*/
+
 
 Delete From Pais;
 Delete From Continente;
