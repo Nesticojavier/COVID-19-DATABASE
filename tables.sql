@@ -138,10 +138,12 @@ Create Table Data_obtained (
 
 */
 
+Delete From Pais;
 Delete From Continente;
 Delete From Grupo;
+Delete From Mundo;
 Delete From Representante;
-
+/*
 -- llenar tabla representante
 INSERT INTO Representante(iso_code, name, population)
 Select iso_code, location, population
@@ -199,23 +201,22 @@ extreme_poverty, cardiovasc_death_rate, diabetes_prevalence,
 female_smokers, male_smokers, handwashing_facilities,
 hospital_beds_per_thousand, life_expectancy, human_development_index
 
+*/
 ---------------------------------- Querys Jesus ----------------------
 -- Insertar a todos los representantes
 insert into Representante(iso_code, name, population)
-select iso_code, location, population from file_data
+select iso_code, location, population from covid_data
 group by iso_code, location, population;
 
 -- Insertar los continentes
 with continents_name as (
-select continent as name from file_data
+select continent as name from covid_data
 where continent is not NULL
 group by continent
 )
-
 insert into Continente(iso_code)
 select representante.iso_code from continents_name
 join representante on representante.name = continents_name.name;
-
 --- Insertar los paises
 -- Codigo de continente con su nombre
 with all_continents as (
@@ -224,21 +225,56 @@ with all_continents as (
 ),
 
 	 continent_contry_codes as (
-select all_continents.iso_code as continent_isocode, file_data.iso_code as country_isocode from file_data
-join all_continents on all_continents.name = file_data.continent
+select all_continents.iso_code as continent_isocode, covid_data.iso_code as country_isocode,
+		 covid_data.population_density, covid_data.median_age, 
+         covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
+         covid_data.extreme_poverty, covid_data.cardiovasc_death_rate, covid_data.diabetes_prevalence, 
+         covid_data.female_smokers, covid_data.male_smokers, covid_data.handwashing_facilities,
+		 covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
+from covid_data
+join all_continents on all_continents.name = covid_data.continent
 where continent is not null
-group by all_continents.iso_code, file_data.iso_code
+group by all_continents.iso_code, covid_data.iso_code,
+		 covid_data.population_density, covid_data.median_age, 
+         covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
+         covid_data.extreme_poverty, covid_data.cardiovasc_death_rate, covid_data.diabetes_prevalence, 
+         covid_data.female_smokers, covid_data.male_smokers, covid_data.handwashing_facilities,
+		 covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
 )
--- OJO: FALTA METERLE LOS OTROS DATOS A PAIS
-insert into pais(iso_code, iso_code_contienente)
-select country_isocode, continent_isocode from continent_contry_codes;
+insert into pais(iso_code, iso_code_contienente, population_density, median_age, 
+aged_65_older, aged_70_older, gdp_per_capita, 
+extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+female_smokers, male_smokers, handwashing_facilities,
+hospital_beds_per_thousand, life_expectancy, human_development_index)
+select country_isocode, continent_isocode,
+       population_density, median_age, 
+aged_65_older, aged_70_older, gdp_per_capita, 
+extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+female_smokers, male_smokers, handwashing_facilities,
+hospital_beds_per_thousand, life_expectancy, human_development_index
+from continent_contry_codes;
+
+Select * From covid_data
+Where iso_code = 'GRL'
 
 --- Insertar al mundo
--- OJO: Faltan los otros datos
-insert into mundo(iso_code)
-select iso_code from file_data
-where iso_code = 'OWID_WRL'
-group by iso_code;
+INSERT INTO Mundo(iso_code, population_density, median_age, 
+aged_65_older, aged_70_older, gdp_per_capita, 
+extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+female_smokers, male_smokers, handwashing_facilities,
+hospital_beds_per_thousand, life_expectancy, human_development_index)
+Select iso_code, population_density, median_age, 
+aged_65_older, aged_70_older, gdp_per_capita, 
+extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+female_smokers, male_smokers, handwashing_facilities,
+hospital_beds_per_thousand, life_expectancy, human_development_index
+From covid_data
+Where iso_code = 'OWID_WRL'
+Group by iso_code, population_density, median_age, 
+aged_65_older, aged_70_older, gdp_per_capita, 
+extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+female_smokers, male_smokers, handwashing_facilities,
+hospital_beds_per_thousand, life_expectancy, human_development_index;
 
 --- Insertar al resto de grupos
 with group_isocodes as (
