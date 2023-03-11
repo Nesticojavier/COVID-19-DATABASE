@@ -143,66 +143,7 @@ Delete From Continente;
 Delete From Grupo;
 Delete From Mundo;
 Delete From Representante;
-/*
--- llenar tabla representante
-INSERT INTO Representante(iso_code, name, population)
-Select iso_code, location, population
-From covid_data
-Where continent is null
-Group by iso_code, location, population;
 
--- lenar tabla continente 
-INSERT INTO Continente(iso_code)
-Select iso_code
-From (Select iso_code, location, population
-      From covid_data
-      Where continent is null
-      Group by iso_code, location, population) t1
-Join (Select continent
-      From covid_data
-      Group by continent) t2
-On t1.location = t2.continent;
-
--- llenar tabla de grupos
-INSERT INTO Grupo(iso_code)
-Select iso_code
-From covid_data
-Where continent is null 
-      AND population is Not Null
-	  AND location != 'World'
-Group by iso_code, location, population
-EXCEPT
-Select iso_code
-From (Select iso_code, location, population
-      From covid_data
-      Where continent is null
-      Group by iso_code, location, population) t1
-Join (Select continent
-      From covid_data
-      Group by continent) t2
-On t1.location = t2.continent;
-
--- llenar tabla Mundo
-INSERT INTO Mundo(iso_code, population_density, median_age, 
-aged_65_older, aged_70_older, gdp_per_capita, 
-extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-female_smokers, male_smokers, handwashing_facilities,
-hospital_beds_per_thousand, life_expectancy, human_development_index)
-Select iso_code, population_density, median_age, 
-aged_65_older, aged_70_older, gdp_per_capita, 
-extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-female_smokers, male_smokers, handwashing_facilities,
-hospital_beds_per_thousand, life_expectancy, human_development_index
-From covid_data
-Where iso_code = 'OWID_WRL'
-Group by iso_code, population_density, median_age, 
-aged_65_older, aged_70_older, gdp_per_capita, 
-extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-female_smokers, male_smokers, handwashing_facilities,
-hospital_beds_per_thousand, life_expectancy, human_development_index
-
-*/
----------------------------------- Querys Jesus ----------------------
 -- Insertar a todos los representantes
 insert into Representante(iso_code, name, population)
 select iso_code, location, population from covid_data
@@ -250,11 +191,11 @@ insert into pais(iso_code, iso_code_contienente, population_density, median_age,
     hospital_beds_per_thousand, life_expectancy, human_development_index)
 select country_isocode, continent_isocode,
        population_density, median_age, 
-    aged_65_older, aged_70_older, gdp_per_capita, 
-    extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-    female_smokers, male_smokers, handwashing_facilities,
-    hospital_beds_per_thousand, life_expectancy, human_development_index
-    from continent_contry_codes;
+       aged_65_older, aged_70_older, gdp_per_capita, 
+       extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+       female_smokers, male_smokers, handwashing_facilities,
+       hospital_beds_per_thousand, life_expectancy, human_development_index
+from continent_contry_codes;
 
 Select * From covid_data
 Where iso_code = 'GRL'
