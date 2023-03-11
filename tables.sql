@@ -142,7 +142,9 @@ Delete From Pais;
 Delete From Continente;
 Delete From Grupo;
 Delete From Mundo;
+Delete From Data_obtained;
 Delete From Representante;
+Delete From Date;
 
 -- Insertar a todos los representantes
 insert into Representante(iso_code, name, population)
@@ -196,9 +198,6 @@ select country_isocode, continent_isocode,
        female_smokers, male_smokers, handwashing_facilities,
        hospital_beds_per_thousand, life_expectancy, human_development_index
 from continent_contry_codes;
-
-Select * From covid_data
-Where iso_code = 'GRL'
 
 --- Insertar al mundo
 INSERT INTO Mundo(iso_code, population_density, median_age, 
