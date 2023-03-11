@@ -175,3 +175,58 @@ Join (Select continent
       From covid_data
       Group by continent) t2
 On t1.location = t2.continent;
+
+
+---------------------------------- Querys Jesus ----------------------
+-- Insertar a todos los representantes
+insert into Representante(iso_code, name, population)
+select iso_code, location, population from file_data
+group by iso_code, location, population
+
+-- Insertar los continentes
+with continents_name as (
+select continent as name from file_data
+where continent is not NULL
+group by continent
+)
+
+insert into Continente(iso_code)
+select representante.iso_code from continents_name
+join representante on representante.name = continents_name.name
+
+--- Insertar los paises
+-- Codigo de continente con su nombre
+with all_continents as (
+	select Continente.iso_code, Representante.name from  Continente
+	join Representante on Representante.iso_code=Continente.iso_code	
+),
+
+	 continent_contry_codes as (
+select all_continents.iso_code as continent_isocode, file_data.iso_code as country_isocode from file_data
+join all_continents on all_continents.name = file_data.continent
+where continent is not null
+group by all_continents.iso_code, file_data.iso_code
+)
+-- OJO: FALTA METERLE LOS OTROS DATOS A PAIS
+insert into pais(iso_code, iso_code_contienente)
+select country_isocode, continent_isocode from continent_contry_codes;
+
+--- Insertar al mundo
+-- OJO: Faltan los otros datos
+insert into mundo(iso_code)
+select iso_code from file_data
+where iso_code = 'OWID_WRL'
+group by iso_code
+
+--- Insertar al resto de grupos
+with group_isocodes as (
+	select iso_code from Representante
+	except	(
+	select iso_code from Pais
+	union
+	select iso_code from Continente
+	union
+	select iso_code from Mundo)
+)
+insert into grupo(iso_code)
+select iso_code from  group_isocodes
