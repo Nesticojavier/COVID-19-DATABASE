@@ -9,6 +9,7 @@ then
 else wget https://covid.ourworldindata.org/data/owid-covid-data.csv
 fi
 
+# Pedir el nombre de usuario que se usara para interactuar con la base
 echo -n "Username [postgres]: "
 read USERNAME
 
@@ -17,6 +18,7 @@ then
     USERNAME="postgres"
 fi
 
+# Ingresar un nombre para asignarselo a la base de datos
 echo -n "Database to create: "
 read DATABASE
 
@@ -27,6 +29,7 @@ do
     read DATABASE
 done
 
+# asignar un server, localhost por defecto
 echo -n "Server [localhost]: "
 read SERVER
 
@@ -35,6 +38,7 @@ then
     SERVER="localhost"
 fi
 
+# asignar un puerto, 5432 por defecto
 echo -n "Port [5432]: "
 read PORT
 
@@ -43,6 +47,8 @@ then
     PORT="5432"
 fi
 
+# Crear la base, importar los datos, crear las tablas del schema y llenarlas
+# con datos
 createdb  -h $SERVER -p $PORT -U $USERNAME $DATABASE
 psql -h $SERVER -p $PORT -U $USERNAME $DATABASE -a -f "import_data.sql"
 psql -h $SERVER -p $PORT -U $USERNAME $DATABASE -a -f "tables.sql"

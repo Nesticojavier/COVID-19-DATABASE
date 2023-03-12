@@ -5,8 +5,6 @@
 Queries que responden a las preguntas pedidas en el enunciado
 */
 
-
-
 ------------------ Pregunta 1
 -- Se puede decir que todos son iguales a excepcion de los primeros valores si
 -- estos se ven ordenados por fecha de forma ascendente.

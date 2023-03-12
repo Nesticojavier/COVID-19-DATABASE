@@ -1,3 +1,11 @@
+/*Autores: 
+    Nestor Gonzalez 16-10455
+    Jesus Bandez 17-10046
+
+Crear la tabla inicial y se importan todos los datos del
+.csv a ella 
+*/
+
 Drop table file_data;
 
 -- Crear tabla con el mismo formato donde se almacenaran los datos
