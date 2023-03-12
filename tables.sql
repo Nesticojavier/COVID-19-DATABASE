@@ -166,7 +166,7 @@ WITH all_continents AS (
 	JOIN Representante ON Representante.iso_code=Continente.iso_code	
 ),
 
-	 continent_contry_codes AS (
+	continent_contry_codes AS (
     SELECT all_continents.iso_code AS continent_isocode, covid_data.iso_code AS country_isocode,
             covid_data.population_density, covid_data.median_age, 
             covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
@@ -199,22 +199,22 @@ FROM continent_contry_codes;
 
 --- Insertar al mundo
 INSERT INTO Mundo(iso_code, population_density, median_age, 
-aged_65_older, aged_70_older, gdp_per_capita, 
-extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-female_smokers, male_smokers, handwashing_facilities,
-hospital_beds_per_thousand, life_expectancy, human_development_index)
+    aged_65_older, aged_70_older, gdp_per_capita, 
+    extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+    female_smokers, male_smokers, handwashing_facilities,
+    hospital_beds_per_thousand, life_expectancy, human_development_index)
 Select iso_code, population_density, median_age, 
-aged_65_older, aged_70_older, gdp_per_capita, 
-extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-female_smokers, male_smokers, handwashing_facilities,
-hospital_beds_per_thousand, life_expectancy, human_development_index
+    aged_65_older, aged_70_older, gdp_per_capita, 
+    extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+    female_smokers, male_smokers, handwashing_facilities,
+    hospital_beds_per_thousand, life_expectancy, human_development_index
 FROM covid_data
 Where iso_code = 'OWID_WRL'
 Group BY iso_code, population_density, median_age, 
-aged_65_older, aged_70_older, gdp_per_capita, 
-extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
-female_smokers, male_smokers, handwashing_facilities,
-hospital_beds_per_thousand, life_expectancy, human_development_index;
+    aged_65_older, aged_70_older, gdp_per_capita, 
+    extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
+    female_smokers, male_smokers, handwashing_facilities,
+    hospital_beds_per_thousand, life_expectancy, human_development_index;
 
 --- Insertar al resto de grupos
 WITH group_isocodes AS (
