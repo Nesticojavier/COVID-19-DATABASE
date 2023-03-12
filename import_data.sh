@@ -45,6 +45,7 @@ fi
 
 createdb  -h $SERVER -p $PORT -U $USERNAME $DATABASE
 psql -h $SERVER -p $PORT -U $USERNAME $DATABASE -a -f "import_data.sql"
+psql -h $SERVER -p $PORT -U $USERNAME $DATABASE -a -f "tables.sql"
 RET=$?
 
 if [ "$RET" != "0" ];
