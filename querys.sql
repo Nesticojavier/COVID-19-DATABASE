@@ -1,4 +1,7 @@
 ------------------ 1
+-- Se puede decir que todos son iguales a excepcion de los primeros valores
+-- Esto se debe a que el query calcula esos primeros valores mientras que
+-- los datos deciden dejarlos como null o 0
 select representante_iso_code,
 	new_cases,
 	new_cases_smoothed,
@@ -35,39 +38,41 @@ join representante on representante.iso_code = representante_minimo.representant
 group by representante_minimo.representante_iso_code, representante.name;
 
 
---------4
+--------3
 with before_66_percent as (
-  Select representante_iso_code, date_id, population
+  Select representante_iso_code as iso_code, date_id, population
   From Data_obtained d
   Join Representante r On d.representante_iso_code = r.iso_code
   Join Pais p On p.iso_code = r.iso_code
   Where people_vaccinated < population*66.666/100
-  Order By representante_iso_code, date_id
+  Order By representante_iso_code, date_id desc
 ),
  after_66_percent as (
-  Select representante_iso_code, date_id, population
+  Select representante_iso_code as iso_code, date_id, population
   From Data_obtained d
   Join Representante r On d.representante_iso_code = r.iso_code
   Join Pais p On p.iso_code = r.iso_code
   Where people_vaccinated >= population*66.666/100
-  Order By representante_iso_code, date_id
+  Order By representante_iso_code, date_id desc
  ),
-   death_rates_b66 as (
-	 select distinct b66.representante_iso_code, 
-		max(total_deaths) over (partition by b66.representante_iso_code) /r.population as death_rate_b66
-	 from before_66_percent as b66
-	 join Representante as r on  r.iso_code = b66.representante_iso_code
-	 join data_obtained on data_obtained.representante_iso_code= b66.representante_iso_code 
-		and data_obtained.date_id = b66.date_id
+  before_66_deaths as (
+	 select b66.iso_code, max(total_deaths) as deaths from before_66_percent as b66
+	 join Data_obtained as d on 
+		d.representante_iso_code = b66.iso_code
+		and d.date_id = b66.date_id
+	 group by b66.iso_code
  ),
-    death_rates_a66 as (
-	 select distinct a66.representante_iso_code, 
-		sum(new_deaths) over (partition by a66.representante_iso_code) /r.population as death_rate_a66
-	 from after_66_percent as a66
-	 join Representante as r on  r.iso_code = a66.representante_iso_code
-	 join data_obtained on data_obtained.representante_iso_code= a66.representante_iso_code 
-		and data_obtained.date_id = a66.date_id
+  after_66_deaths as (
+	 select a66.iso_code, max(d.total_deaths)-deaths as deaths from after_66_percent as a66
+	 join Data_obtained as d on 
+		d.representante_iso_code = a66.iso_code
+		and d.date_id = a66.date_id
+	 join before_66_deaths as b66 on b66.iso_code = a66.iso_code
+	 group by a66.iso_code, b66.deaths
+ 	 order by a66.iso_code
  )
+select after_66_deaths.iso_code, before_66_deaths.deaths, after_66_deaths.deaths from after_66_deaths
+join before_66_deaths on after_66_deaths.iso_code = before_66_deaths.iso_code
  
 
  
@@ -84,4 +89,4 @@ with continent_cases as (
 	
 select representante_iso_code, max_cases/population as grow_rate from continent_cases
 join Representante as r on r.iso_code =  representante_iso_code
-order by grow_rate DESC
+order by grow_rate DESC;
