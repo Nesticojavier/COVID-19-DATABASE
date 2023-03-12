@@ -1,4 +1,4 @@
------------------- 1
+------------------ Pregunta 1
 -- Se puede decir que todos son iguales a excepcion de los primeros valores si
 -- estos se ven ordenados por fecha de forma ascendente.
 -- Esto se debe a que el query calcula esos primeros valores mientras que
@@ -14,9 +14,7 @@ select representante_iso_code,
 from data_obtained;
 
 
-
-
-------------------2
+-------------- Pregunta 2
 with half_cases as (
 	select representante_iso_code, max(total_cases)/2 as half_total_cases from data_obtained
 	join Pais on Pais.iso_code = data_obtained.representante_iso_code
@@ -39,7 +37,7 @@ join representante on representante.iso_code = representante_minimo.representant
 group by representante_minimo.representante_iso_code, representante.name;
 
 
---------3
+--------Pregunta 3
 with before_66_percent as (
   Select representante_iso_code as iso_code, date_id, population
   From Data_obtained d
@@ -96,7 +94,7 @@ select b66d.iso_code,
 		full join before_66_death_rate as b66d on b66d.iso_code = a66d.iso_code;
 
 
-------- 4
+------- Pregunta 4
 with half_deaths as (
 	select representante_iso_code, max(total_deaths)/2 as half_total_deaths from data_obtained
 	join Pais on Pais.iso_code = data_obtained.representante_iso_code
@@ -131,7 +129,7 @@ with half_deaths as (
 
 
 
------ 5
+----- Pregunta 5
 with continent_cases as (
 	select representante_iso_code, max(total_cases) as max_cases from data_obtained
 		join continente on continente.iso_code = representante_iso_code

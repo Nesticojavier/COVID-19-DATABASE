@@ -27,8 +27,7 @@ Create Table Continente(
 
 Create Table Pais(
 	iso_code varchar(255) PRIMARY KEY,
-    iso_code_contienente varchar(255) REFERENCES Continente (iso_code),
-    --population double precision,
+    iso_code_contienente varchar(255) REFERENCES Continente (iso_code),    
     population_density double precision,
     median_age double precision ,
     aged_65_older double precision,
@@ -48,8 +47,7 @@ Create Table Pais(
 
 Create Table Mundo(
     iso_code varchar(255) PRIMARY KEY,
-    FOREIGN KEY (iso_code) REFERENCES Representante (iso_code),
-    --population double precision,
+    FOREIGN KEY (iso_code) REFERENCES Representante (iso_code),    
     population_density double precision ,
     median_age double precision ,
     aged_65_older double precision ,
