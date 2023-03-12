@@ -1,7 +1,13 @@
 #!/bin/bash
-# Copyright (c) 2012-2022, EnterpriseDB Corporation.  All rights reserved
+# Copyright (c) 2023, Nestor Gonzalez, Jesus Bandez
+# PostgreSQL psql runner script for OS X, Linux
 
-# PostgreSQL psql runner script for OS X
+# Descargar el archivo si no está ya descargado
+if [ -e owid-covid-data.csv ];
+then
+    echo "El archivo owid-covid-data.csv ya se encuentra descargado"
+else wget https://covid.ourworldindata.org/data/owid-covid-data.csv
+fi
 
 echo -n "Username [postgres]: "
 read USERNAME
