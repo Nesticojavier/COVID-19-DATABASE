@@ -1,133 +1,133 @@
 
-drop table if exists Data_obtained;
-drop table if exists Pais;
-drop table if exists Continente;
-drop table if exists Grupo;
-drop table if exists Mundo;
-drop table if exists Representante;
-drop table if exists date;
+DROP TABLE IF EXISTS Data_obtained;
+DROP TABLE IF EXISTS Pais;
+DROP TABLE IF EXISTS Continente;
+DROP TABLE IF EXISTS Grupo;
+DROP TABLE IF EXISTS Mundo;
+DROP TABLE IF EXISTS Representante;
+DROP TABLE IF EXISTS date;
 
 
 Create Table Representante(
-    iso_code varchar(255) PRIMARY KEY,
-	name varchar(255),
-    population double precision
+    iso_code VARCHAR(255) PRIMARY KEY,
+	name VARCHAR(255),
+    population DOUBLE PRECISION
 );
 
 Create Table Grupo(
-    iso_code varchar(255) PRIMARY KEY,
+    iso_code VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
 );
 
 Create Table Continente(
-    iso_code varchar(255) PRIMARY KEY,
+    iso_code VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
 );
 
 
 Create Table Pais(
-	iso_code varchar(255) PRIMARY KEY,
-    iso_code_contienente varchar(255) REFERENCES Continente (iso_code),    
-    population_density double precision,
-    median_age double precision ,
-    aged_65_older double precision,
-    aged_70_older double precision,
-    gdp_per_capita double precision ,
-    extreme_poverty double precision ,
-    cardiovasc_death_rate double precision ,
-    diabetes_prevalence double precision ,
-    female_smokers double precision ,
-    male_smokers double precision ,
-    handwashing_facilities double precision ,
-    hospital_beds_per_thousand double precision ,
-    life_expectancy double precision ,
-    human_development_index double precision ,
+	iso_code VARCHAR(255) PRIMARY KEY,
+    iso_code_contienente VARCHAR(255) REFERENCES Continente (iso_code),    
+    population_density DOUBLE PRECISION,
+    median_age DOUBLE PRECISION ,
+    aged_65_older DOUBLE PRECISION,
+    aged_70_older DOUBLE PRECISION,
+    gdp_per_capita DOUBLE PRECISION ,
+    extreme_poverty DOUBLE PRECISION ,
+    cardiovasc_death_rate DOUBLE PRECISION ,
+    diabetes_prevalence DOUBLE PRECISION ,
+    female_smokers DOUBLE PRECISION ,
+    male_smokers DOUBLE PRECISION ,
+    handwashing_facilities DOUBLE PRECISION ,
+    hospital_beds_per_thousand DOUBLE PRECISION ,
+    life_expectancy DOUBLE PRECISION ,
+    human_development_index DOUBLE PRECISION ,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
 );
 
 Create Table Mundo(
-    iso_code varchar(255) PRIMARY KEY,
+    iso_code VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code),    
-    population_density double precision ,
-    median_age double precision ,
-    aged_65_older double precision ,
-    aged_70_older double precision ,
-    gdp_per_capita double precision ,
-    extreme_poverty double precision ,
-    cardiovasc_death_rate double precision ,
-    diabetes_prevalence double precision ,
-    female_smokers double precision ,
-    male_smokers double precision ,
-    handwashing_facilities double precision ,
-    hospital_beds_per_thousand double precision ,
-    life_expectancy double precision ,
-    human_development_index double precision ,
+    population_density DOUBLE PRECISION ,
+    median_age DOUBLE PRECISION ,
+    aged_65_older DOUBLE PRECISION ,
+    aged_70_older DOUBLE PRECISION ,
+    gdp_per_capita DOUBLE PRECISION ,
+    extreme_poverty DOUBLE PRECISION ,
+    cardiovasc_death_rate DOUBLE PRECISION ,
+    diabetes_prevalence DOUBLE PRECISION ,
+    female_smokers DOUBLE PRECISION ,
+    male_smokers DOUBLE PRECISION ,
+    handwashing_facilities DOUBLE PRECISION ,
+    hospital_beds_per_thousand DOUBLE PRECISION ,
+    life_expectancy DOUBLE PRECISION ,
+    human_development_index DOUBLE PRECISION ,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
 );
 
 Create Table Date(
-    date date,
+    date DATE,
     Primary Key(date)
 );
 
 Create Table Data_obtained (
-    representante_iso_code varchar(255),
-    date_id date,
+    representante_iso_code VARCHAR(255),
+    date_id DATE,
 
-    stringency_index double precision,
-    reproduction_rate double precision,
+    stringency_index DOUBLE PRECISION,
+    reproduction_rate DOUBLE PRECISION,
 
-    total_cases double precision,
-    new_cases double precision,
-    new_cases_smoothed double precision,
-    total_cases_per_million double precision,
-    new_cases_per_million double precision,
-    new_cases_smoothed_per_million double precision,
+    total_cases DOUBLE PRECISION,
+    new_cases DOUBLE PRECISION,
+    new_cases_smoothed DOUBLE PRECISION,
+    total_cases_per_million DOUBLE PRECISION,
+    new_cases_per_million DOUBLE PRECISION,
+    new_cases_smoothed_per_million DOUBLE PRECISION,
 
-    total_deaths double precision,
-    new_deaths double precision,
-    new_deaths_smoothed double precision,
-    total_deaths_per_million double precision,
-    new_deaths_per_million double precision,
-    new_deaths_smoothed_per_million double precision,
+    total_deaths DOUBLE PRECISION,
+    new_deaths DOUBLE PRECISION,
+    new_deaths_smoothed DOUBLE PRECISION,
+    total_deaths_per_million DOUBLE PRECISION,
+    new_deaths_per_million DOUBLE PRECISION,
+    new_deaths_smoothed_per_million DOUBLE PRECISION,
 
-    icu_patients double precision,
-    icu_patients_per_million double precision,
-    hosp_patients double precision,
-    hosp_patients_per_million double precision,
-    weekly_icu_admissions double precision,
-    weekly_icu_admissions_per_million double precision,
-    weekly_hosp_admissions double precision,
-    weekly_hosp_admissions_per_million double precision,    
+    icu_patients DOUBLE PRECISION,
+    icu_patients_per_million DOUBLE PRECISION,
+    hosp_patients DOUBLE PRECISION,
+    hosp_patients_per_million DOUBLE PRECISION,
+    weekly_icu_admissions DOUBLE PRECISION,
+    weekly_icu_admissions_per_million DOUBLE PRECISION,
+    weekly_hosp_admissions DOUBLE PRECISION,
+    weekly_hosp_admissions_per_million DOUBLE PRECISION,    
 
-    total_tests double precision,
-    new_tests double precision,
-    total_tests_per_thousand double precision,
-    new_tests_per_thousand double precision,
-    new_tests_smoothed double precision,
-    new_tests_smoothed_per_thousand double precision,
-    positive_rate double precision,
-    tests_per_case double precision,
-    tests_units varchar(255),
+    total_tests DOUBLE PRECISION,
+    new_tests DOUBLE PRECISION,
+    total_tests_per_thousand DOUBLE PRECISION,
+    new_tests_per_thousand DOUBLE PRECISION,
+    new_tests_smoothed DOUBLE PRECISION,
+    new_tests_smoothed_per_thousand DOUBLE PRECISION,
+    positive_rate DOUBLE PRECISION,
+    tests_per_case DOUBLE PRECISION,
+    tests_units VARCHAR(255),
 
-    total_vaccinations double precision,
-    people_vaccinated double precision,
-    people_fully_vaccinated double precision,
-    total_boosters double precision,
-    new_vaccinations double precision,
-    new_vaccinations_smoothed double precision,
-    total_vaccinations_per_hundred double precision,
-    people_vaccinated_per_hundred double precision,
-    people_fully_vaccinated_per_hundred double precision,
-    total_boosters_per_hundred double precision,
-    new_vaccinations_smoothed_per_million double precision,
-    new_people_vaccinated_smoothed double precision,
-    new_people_vaccinated_smoothed_per_hundred double precision,
+    total_vaccinations DOUBLE PRECISION,
+    people_vaccinated DOUBLE PRECISION,
+    people_fully_vaccinated DOUBLE PRECISION,
+    total_boosters DOUBLE PRECISION,
+    new_vaccinations DOUBLE PRECISION,
+    new_vaccinations_smoothed DOUBLE PRECISION,
+    total_vaccinations_per_hundred DOUBLE PRECISION,
+    people_vaccinated_per_hundred DOUBLE PRECISION,
+    people_fully_vaccinated_per_hundred DOUBLE PRECISION,
+    total_boosters_per_hundred DOUBLE PRECISION,
+    new_vaccinations_smoothed_per_million DOUBLE PRECISION,
+    new_people_vaccinated_smoothed DOUBLE PRECISION,
+    new_people_vaccinated_smoothed_per_hundred DOUBLE PRECISION,
 
-    excess_mortality double precision,
-    excess_mortality_cumulative double precision,
-    excess_mortality_cumulative_absolute double precision,
-    excess_mortality_cumulative_per_million double precision,
+    excess_mortality DOUBLE PRECISION,
+    excess_mortality_cumulative DOUBLE PRECISION,
+    excess_mortality_cumulative_absolute DOUBLE PRECISION,
+    excess_mortality_cumulative_per_million DOUBLE PRECISION,
 
     Primary Key (representante_iso_code, date_id),
     FOREIGN KEY (representante_iso_code) REFERENCES  Representante (iso_code),
@@ -136,47 +136,47 @@ Create Table Data_obtained (
 
 
 
-Delete From Pais;
-Delete From Continente;
-Delete From Grupo;
-Delete From Mundo;
-Delete From Data_obtained;
-Delete From Representante;
-Delete From Date;
+DELETE FROM Pais;
+DELETE FROM Continente;
+DELETE FROM Grupo;
+DELETE FROM Mundo;
+DELETE FROM Data_obtained;
+DELETE FROM Representante;
+DELETE FROM Date;
 
 -- Insertar a todos los representantes
-insert into Representante(iso_code, name, population)
-select iso_code, location, population from covid_data
-group by iso_code, location, population;
+INSERT INTO Representante(iso_code, name, population)
+SELECT iso_code, location, population FROM covid_data
+GROUP BY iso_code, location, population;
 
 -- Insertar los continentes
-with continents_name as (
-select continent as name from covid_data
-where continent is not NULL
-group by continent
+WITH continents_name AS (
+SELECT continent AS name FROM covid_data
+where continent IS NOT NULL
+GROUP BY continent
 )
-insert into Continente(iso_code)
-select representante.iso_code from continents_name
-join representante on representante.name = continents_name.name;
+INSERT INTO Continente(iso_code)
+SELECT representante.iso_code FROM continents_name
+JOIN representante ON representante.name = continents_name.name;
 
 --- Insertar los paises
 -- Codigo de continente con su nombre
-with all_continents as (
-	select Continente.iso_code, Representante.name from  Continente
-	join Representante on Representante.iso_code=Continente.iso_code	
+WITH all_continents AS (
+	SELECT Continente.iso_code, Representante.name FROM  Continente
+	JOIN Representante ON Representante.iso_code=Continente.iso_code	
 ),
 
-	 continent_contry_codes as (
-    select all_continents.iso_code as continent_isocode, covid_data.iso_code as country_isocode,
+	 continent_contry_codes AS (
+    SELECT all_continents.iso_code AS continent_isocode, covid_data.iso_code AS country_isocode,
             covid_data.population_density, covid_data.median_age, 
             covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
             covid_data.extreme_poverty, covid_data.cardiovasc_death_rate, covid_data.diabetes_prevalence, 
             covid_data.female_smokers, covid_data.male_smokers, covid_data.handwashing_facilities,
             covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
-    from covid_data
-    join all_continents on all_continents.name = covid_data.continent
-    where continent is not null
-    group by all_continents.iso_code, covid_data.iso_code,
+    FROM covid_data
+    JOIN all_continents ON all_continents.name = covid_data.continent
+    where continent IS NOT null
+    GROUP BY all_continents.iso_code, covid_data.iso_code,
             covid_data.population_density, covid_data.median_age, 
             covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
             covid_data.extreme_poverty, covid_data.cardiovasc_death_rate, covid_data.diabetes_prevalence, 
@@ -184,18 +184,18 @@ with all_continents as (
             covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
 )
 
-insert into pais(iso_code, iso_code_contienente, population_density, median_age, 
+INSERT INTO pais(iso_code, iso_code_contienente, population_density, median_age, 
     aged_65_older, aged_70_older, gdp_per_capita, 
     extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
     female_smokers, male_smokers, handwashing_facilities,
     hospital_beds_per_thousand, life_expectancy, human_development_index)
-select country_isocode, continent_isocode,
+SELECT country_isocode, continent_isocode,
        population_density, median_age, 
        aged_65_older, aged_70_older, gdp_per_capita, 
        extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
        female_smokers, male_smokers, handwashing_facilities,
        hospital_beds_per_thousand, life_expectancy, human_development_index
-from continent_contry_codes;
+FROM continent_contry_codes;
 
 --- Insertar al mundo
 INSERT INTO Mundo(iso_code, population_density, median_age, 
@@ -208,40 +208,40 @@ aged_65_older, aged_70_older, gdp_per_capita,
 extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
 female_smokers, male_smokers, handwashing_facilities,
 hospital_beds_per_thousand, life_expectancy, human_development_index
-From covid_data
+FROM covid_data
 Where iso_code = 'OWID_WRL'
-Group by iso_code, population_density, median_age, 
+Group BY iso_code, population_density, median_age, 
 aged_65_older, aged_70_older, gdp_per_capita, 
 extreme_poverty, cardiovasc_death_rate, diabetes_prevalence, 
 female_smokers, male_smokers, handwashing_facilities,
 hospital_beds_per_thousand, life_expectancy, human_development_index;
 
 --- Insertar al resto de grupos
-with group_isocodes as (
-	select iso_code from Representante
-	except	(
-	select iso_code from Pais
-	union
-	select iso_code from Continente
-	union
-	select iso_code from Mundo)
+WITH group_isocodes AS (
+	SELECT iso_code FROM Representante
+	EXCEPT	(
+	SELECT iso_code FROM Pais
+	UNION
+	SELECT iso_code FROM Continente
+	UNION
+	SELECT iso_code FROM Mundo)
 )
-insert into grupo(iso_code)
-select iso_code from  group_isocodes;
+INSERT INTO grupo(iso_code)
+SELECT iso_code FROM  group_isocodes;
 
 --- Insertar las fechas
-insert into Date(date)
-select date from covid_data
-group by date;
+INSERT INTO Date(date)
+SELECT date FROM covid_data
+GROUP BY date;
 
 -- Relacionar los representates con sus datos y la fecha
 
-with representante_fecha as (
-	select iso_code, date from covid_data
-	group by date, iso_code
+WITH representante_fecha AS (
+	SELECT iso_code, date FROM covid_data
+	GROUP BY date, iso_code
 	)
 
-insert into Data_obtained(representante_iso_code, date_id, stringency_index, 
+INSERT INTO Data_obtained(representante_iso_code, date_id, stringency_index, 
 	reproduction_rate, total_cases, new_cases, new_cases_smoothed, total_cases_per_million,
     new_cases_per_million, new_cases_smoothed_per_million, total_deaths, new_deaths, new_deaths_smoothed,
     total_deaths_per_million, new_deaths_per_million, new_deaths_smoothed_per_million,
@@ -255,7 +255,7 @@ insert into Data_obtained(representante_iso_code, date_id, stringency_index,
     new_vaccinations_smoothed_per_million, new_people_vaccinated_smoothed, new_people_vaccinated_smoothed_per_hundred,
     excess_mortality, excess_mortality_cumulative, excess_mortality_cumulative_absolute, excess_mortality_cumulative_per_million
 )
-select iso_code, date, stringency_index, reproduction_rate, total_cases, new_cases, new_cases_smoothed, total_cases_per_million,
+SELECT iso_code, date, stringency_index, reproduction_rate, total_cases, new_cases, new_cases_smoothed, total_cases_per_million,
     new_cases_per_million, new_cases_smoothed_per_million, total_deaths, new_deaths, new_deaths_smoothed,
     total_deaths_per_million, new_deaths_per_million, new_deaths_smoothed_per_million,
     icu_patients, icu_patients_per_million, hosp_patients, hosp_patients_per_million,
@@ -267,5 +267,5 @@ select iso_code, date, stringency_index, reproduction_rate, total_cases, new_cas
     people_vaccinated_per_hundred, people_fully_vaccinated_per_hundred, total_boosters_per_hundred,
     new_vaccinations_smoothed_per_million, new_people_vaccinated_smoothed, new_people_vaccinated_smoothed_per_hundred,
     excess_mortality, excess_mortality_cumulative, excess_mortality_cumulative_absolute, excess_mortality_cumulative_per_million 
-    from representante_fecha
-natural join covid_data;
+    FROM representante_fecha
+NATURAL JOIN covid_data;
