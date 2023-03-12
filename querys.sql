@@ -7,7 +7,7 @@ select representante_iso_code,
          order by date_id 
          ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
          ) as new_cases_smoothed_calculado
-from data_obtained
+from data_obtained;
 
 
 
@@ -32,4 +32,58 @@ join data_obtained
 	on data_obtained.representante_iso_code = representante_minimo.representante_iso_code 
 	and data_obtained.total_cases = representante_minimo.cases
 join representante on representante.iso_code = representante_minimo.representante_iso_code
-group by representante_minimo.representante_iso_code, representante.name
+group by representante_minimo.representante_iso_code, representante.name;
+
+
+--------4
+with before_66_percent as (
+  Select representante_iso_code, date_id, population
+  From Data_obtained d
+  Join Representante r On d.representante_iso_code = r.iso_code
+  Join Pais p On p.iso_code = r.iso_code
+  Where people_vaccinated < population*66.666/100
+  Order By representante_iso_code, date_id
+),
+ after_66_percent as (
+  Select representante_iso_code, date_id, population
+  From Data_obtained d
+  Join Representante r On d.representante_iso_code = r.iso_code
+  Join Pais p On p.iso_code = r.iso_code
+  Where people_vaccinated >= population*66.666/100
+  Order By representante_iso_code, date_id
+ ),
+   death_rates_b66 as (
+	 select distinct b66.representante_iso_code, 
+		max(total_deaths) over (partition by b66.representante_iso_code) /r.population as death_rate_b66
+	 from before_66_percent as b66
+	 join Representante as r on  r.iso_code = b66.representante_iso_code
+	 join data_obtained on data_obtained.representante_iso_code= b66.representante_iso_code 
+		and data_obtained.date_id = b66.date_id
+ ),
+    death_rates_a66 as (
+	 select distinct a66.representante_iso_code, 
+		sum(new_deaths) over (partition by a66.representante_iso_code) /r.population as death_rate_a66
+	 from after_66_percent as a66
+	 join Representante as r on  r.iso_code = a66.representante_iso_code
+	 join data_obtained on data_obtained.representante_iso_code= a66.representante_iso_code 
+		and data_obtained.date_id = a66.date_id
+ )
+ 
+
+ 
+ select b66.representante_iso_code, death_rate_b66 as antes, death_rate_a66 as despues from death_rates_b66	as b66
+	join death_rates_a66 on death_rates_a66.representante_iso_code = b66.representante_iso_code;
+
+
+----- 5
+select representante_iso_code, date_id, total_cases,
+	100 / representante.population *(total_cases -  LAG(total_cases, 1)	
+	 	over (partition by representante_iso_code order by date_id)) /
+		LAG(total_cases, 1)	
+	 	over (partition by representante_iso_code order by date_id)
+		 as percentage_increase,
+		new_cases
+from data_obtained
+join representante on representante.iso_code = representante_iso_code
+join continente on data_obtained.representante_iso_code = continente.iso_code
+order by representante_iso_code, date_id
