@@ -76,14 +76,12 @@ with before_66_percent as (
 
 
 ----- 5
-select representante_iso_code, date_id, total_cases,
-	100 / representante.population *(total_cases -  LAG(total_cases, 1)	
-	 	over (partition by representante_iso_code order by date_id)) /
-		LAG(total_cases, 1)	
-	 	over (partition by representante_iso_code order by date_id)
-		 as percentage_increase,
-		new_cases
-from data_obtained
-join representante on representante.iso_code = representante_iso_code
-join continente on data_obtained.representante_iso_code = continente.iso_code
-order by representante_iso_code, date_id
+with continent_cases as (
+	select representante_iso_code, max(total_cases) as max_cases from data_obtained
+		join continente on continente.iso_code = representante_iso_code
+		group by representante_iso_code
+	)
+	
+select representante_iso_code, max_cases/population as grow_rate from continent_cases
+join Representante as r on r.iso_code =  representante_iso_code
+order by grow_rate DESC
