@@ -8,24 +8,24 @@ DROP TABLE IF EXISTS Representante;
 DROP TABLE IF EXISTS date;
 
 
-Create Table Representante(
+CREATE TABLE Representante(
     iso_code VARCHAR(255) PRIMARY KEY,
 	name VARCHAR(255),
     population DOUBLE PRECISION
 );
 
-Create Table Grupo(
+CREATE TABLE Grupo(
     iso_code VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
 );
 
-Create Table Continente(
+CREATE TABLE Continente(
     iso_code VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
 );
 
 
-Create Table Pais(
+CREATE TABLE Pais(
 	iso_code VARCHAR(255) PRIMARY KEY,
     iso_code_contienente VARCHAR(255) REFERENCES Continente (iso_code),    
     population_density DOUBLE PRECISION,
@@ -45,7 +45,7 @@ Create Table Pais(
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
 );
 
-Create Table Mundo(
+CREATE TABLE Mundo(
     iso_code VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code),    
     population_density DOUBLE PRECISION ,
@@ -65,12 +65,12 @@ Create Table Mundo(
     FOREIGN KEY (iso_code) REFERENCES Representante (iso_code)
 );
 
-Create Table Date(
+CREATE TABLE Date(
     date DATE,
     Primary Key(date)
 );
 
-Create Table Data_obtained (
+CREATE TABLE Data_obtained (
     representante_iso_code VARCHAR(255),
     date_id DATE,
 
@@ -152,7 +152,7 @@ GROUP BY iso_code, location, population;
 -- Insertar los continentes
 WITH continents_name AS (
 SELECT continent AS name FROM covid_data
-where continent IS NOT NULL
+WHERE continent IS NOT NULL
 GROUP BY continent
 )
 INSERT INTO Continente(iso_code)
@@ -175,7 +175,7 @@ WITH all_continents AS (
             covid_data.hospital_beds_per_thousand, covid_data.life_expectancy, covid_data.human_development_index
     FROM covid_data
     JOIN all_continents ON all_continents.name = covid_data.continent
-    where continent IS NOT null
+    WHERE continent IS NOT null
     GROUP BY all_continents.iso_code, covid_data.iso_code,
             covid_data.population_density, covid_data.median_age, 
             covid_data.aged_65_older, covid_data.aged_70_older, covid_data.gdp_per_capita, 
