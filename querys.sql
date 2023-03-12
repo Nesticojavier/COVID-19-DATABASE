@@ -1,7 +1,8 @@
 ------------------ 1
--- Se puede decir que todos son iguales a excepcion de los primeros valores
+-- Se puede decir que todos son iguales a excepcion de los primeros valores si
+-- estos se ven ordenados por fecha de forma ascendente.
 -- Esto se debe a que el query calcula esos primeros valores mientras que
--- los datos deciden dejarlos como null o 0
+-- los datos que nos dan deciden dejarlos como null o 0
 select representante_iso_code,
 	new_cases,
 	new_cases_smoothed,
@@ -70,14 +71,64 @@ with before_66_percent as (
 	 join before_66_deaths as b66 on b66.iso_code = a66.iso_code
 	 group by a66.iso_code, b66.deaths
  	 order by a66.iso_code
+ ),
+ before_66_days as (
+	 select iso_code, max(b66.date_id)-min(b66.date_id)+1 as days from before_66_percent as b66
+	 group by iso_code
+),
+ after_66_days as (
+	 select iso_code, max(a66.date_id)-min(a66.date_id)+1 as days from after_66_percent as a66
+	 group by iso_code
+),
+ before_66_death_rate as (
+ 	select b66d.iso_code, b66d.deaths/before_66_days.days as death_rate_per_day from before_66_deaths as b66d
+	join before_66_days on before_66_days.iso_code = b66d.iso_code
+ ),
+  after_66_death_rate as (
+ 	select a66d.iso_code, a66d.deaths/after_66_days.days as death_rate_per_day from after_66_deaths as a66d
+	join after_66_days on after_66_days.iso_code = a66d.iso_code
  )
-select after_66_deaths.iso_code, before_66_deaths.deaths, after_66_deaths.deaths from after_66_deaths
-join before_66_deaths on after_66_deaths.iso_code = before_66_deaths.iso_code
  
+select b66d.iso_code, 
+		b66d.death_rate_per_day as death_rate_per_day_before,
+		a66d.death_rate_per_day as death_rate_per_day_after
+		from after_66_death_rate as a66d
+		full join before_66_death_rate as b66d on b66d.iso_code = a66d.iso_code;
 
- 
- select b66.representante_iso_code, death_rate_b66 as antes, death_rate_a66 as despues from death_rates_b66	as b66
-	join death_rates_a66 on death_rates_a66.representante_iso_code = b66.representante_iso_code;
+
+------- 4
+with half_deaths as (
+	select representante_iso_code, max(total_deaths)/2 as half_total_deaths from data_obtained
+	join Pais on Pais.iso_code = data_obtained.representante_iso_code
+	group by representante_iso_code
+	),
+    representante_fecha_half_deaths as(
+	select representante_iso_code, min(total_deaths) as deaths from data_obtained
+		where total_deaths >= (
+			select half_total_deaths from half_deaths
+			where half_deaths.representante_iso_code = data_obtained.representante_iso_code
+			)
+	group by representante_iso_code
+		),
+	half_deaths_dates as (	
+	select representante_fecha_half_deaths.representante_iso_code, MIN(date_id) as date_half_deaths
+	from representante_fecha_half_deaths
+	join data_obtained 
+		on data_obtained.representante_iso_code = representante_fecha_half_deaths.representante_iso_code 
+		and data_obtained.total_deaths = representante_fecha_half_deaths.deaths
+	join representante on representante.iso_code = representante_fecha_half_deaths.representante_iso_code
+	group by representante_fecha_half_deaths.representante_iso_code
+	)
+	
+	select hdd.representante_iso_code, r.name, 
+		d.people_fully_vaccinated/r.population * 100 as vaccination_percentage
+		from half_deaths_dates as hdd
+	join data_obtained as d 
+		on d.representante_iso_code = hdd.representante_iso_code
+		and d.date_id = hdd.date_half_deaths
+	join representante as r
+		on r.iso_code = hdd.representante_iso_code;
+
 
 
 ----- 5
